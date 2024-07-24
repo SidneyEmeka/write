@@ -30,48 +30,88 @@ class _AllritespageState extends State<Allritespage> {
   //LIST TILE
   Widget aWriteTile(
       {required int id, required String content, required int isDone}) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey)),
-        color: Colors.white,
+    return Dismissible(
+      key: ValueKey<int>(id),
+      onDismissed: (direction) {
+        mydbprovider.deleteAwrite(id: id);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.grey,
+          content: Align(
+              alignment: Alignment.center,
+              child: Text("Write Deleted",
+                  style: TextStyle(color: Colors.white, fontSize: 12))),
+          duration: Duration(seconds: 1),
+        ));
+      },
+      background: Container(
+        decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.white)),
+       // margin: const EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        alignment: Alignment.centerLeft,
+        child: const Text(
+          "Delete",
+          style: TextStyle(color: Colors.white, fontSize: 12),
+        ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Text(content),
-            trailing: isDone == 0
-                ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isDone = 1;
-                      });
-                      mydbprovider.updateAWrite(id: id, isdone: isDone);
-                    },
-                    icon: const Icon(
-                      FontAwesomeIcons.circle,
-                      color: Colors.red,
-                      size: 15,
-                    ),
-                  )
-                : IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isDone = 0;
-                      });
-                      mydbprovider.updateAWrite(id: id, isdone: isDone);
-                    },
-                    icon: const Icon(
-                      FontAwesomeIcons.circleCheck,
-                      color: Colors.green,
-                      size: 15,
-                    ),
-                  ),
+      secondaryBackground: Container(
+        decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.white)),
+       // margin: const EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        alignment: Alignment.centerRight,
+        child: const Text(
+          "Delete",
+          style: TextStyle(color: Colors.white, fontSize: 12),
+        ),
+      ),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 5),
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey)),
+          color: Colors.white,
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 5),
+          leading: Text(
+            content,
+            style: isDone == 1
+                ? const TextStyle(
+                    decoration: TextDecoration.lineThrough, color: Colors.grey)
+                : const TextStyle(decoration: TextDecoration.none),
           ),
-        ],
+          trailing: isDone == 0
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isDone = 1;
+                    });
+                    mydbprovider.updateAWrite(id: id, isdone: isDone);
+                  },
+                  icon: const Icon(
+                    FontAwesomeIcons.circle,
+                    color: Colors.red,
+                    size: 15,
+                  ),
+                )
+              : IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isDone = 0;
+                    });
+                    mydbprovider.updateAWrite(id: id, isdone: isDone);
+                  },
+                  icon: const Icon(
+                    FontAwesomeIcons.circleCheck,
+                    color: Colors.green,
+                    size: 15,
+                  ),
+                ),
+        ),
       ),
     );
   }
@@ -94,8 +134,7 @@ class _AllritespageState extends State<Allritespage> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
           decoration: BoxDecoration(
-              color: Colors.purple.shade100,
-              borderRadius: BorderRadius.circular(10)),
+              color: Colors.grey, borderRadius: BorderRadius.circular(10)),
           height: MediaQuery.of(context).size.height / 1.3,
           width: MediaQuery.of(context).size.width,
           margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -120,8 +159,10 @@ class _AllritespageState extends State<Allritespage> {
                         cursorColor: Colors.transparent,
                         decoration: const InputDecoration(
                             hintStyle: TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 12),
-                            hintText: "Have something in mind?",
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
+                            hintText: "Wanna 'rite' something?",
                             border: OutlineInputBorder(
                                 borderSide: BorderSide.none)),
                       ),
@@ -157,12 +198,11 @@ class _AllritespageState extends State<Allritespage> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   return Container(
-                    padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.white)),
-                    height: MediaQuery.of(context).size.height / 1.7,
+                     height: MediaQuery.of(context).size.height / 1.7,
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,

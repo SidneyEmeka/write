@@ -2,8 +2,6 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:write/models/writesmodel.dart';
 
-//import '../models/ritesmodel.dart';
-
 class Dbproviders {
   //SINGLETON DESIGN PATTERN
   static Database? db;
@@ -62,10 +60,18 @@ class Dbproviders {
     }).toList();
     return theWrites;
   }
+
   //UPDATE
   void updateAWrite({required int id, required int isdone}) async {
     final db = await openMyDatabase();
-    await db.update(tableName, {tableisDone: isdone}, where: "id = ?", whereArgs: [id] );
+    await db.update(tableName, {tableisDone: isdone},
+        where: "id = ?", whereArgs: [id]);
+  }
+
+  //DELETE
+  void deleteAwrite({required int id}) async {
+    final db = await openMyDatabase();
+    await db.delete(tableName, where: "id =?", whereArgs: [id]);
   }
 //CLASS END
 }
