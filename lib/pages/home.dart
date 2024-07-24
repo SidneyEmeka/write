@@ -88,84 +88,92 @@ class _AllritespageState extends State<Allritespage> {
           children: [Text("RITE"), Icon(FontAwesomeIcons.pagelines)],
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-        decoration: BoxDecoration(
-            color: Colors.purple.shade100,
-            borderRadius: BorderRadius.circular(10)),
-        height: MediaQuery.of(context).size.height / 1.3,
-        width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-        child: FutureBuilder(
-          future: mydbprovider.getAllWrites(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError || snapshot.data == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //therites
-                  ...snapshot.data!.map((aWrite) {
-                    final aWriteontent = aWrite.userContent;
-                    final aWriteStatus = aWrite.userIsDone;
-                    final aWriteId = aWrite.userWroteID;
-                    return aWriteTile(
-                        content: aWriteontent,
-                        isDone: aWriteStatus,
-                        id: aWriteId);
-                  })
-                ],
-              ),
-            );
-          },
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        height: 100,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+          decoration: BoxDecoration(
+              color: Colors.purple.shade100,
+              borderRadius: BorderRadius.circular(10)),
+          height: MediaQuery.of(context).size.height / 1.3,
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.black)),
-                height: 35,
-                width: MediaQuery.of(context).size.width / 1.5,
-                child: TextField(
-                  controller: contentController,
-                  cursorColor: Colors.white,
-                  decoration: const InputDecoration(
-                      hintStyle:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
-                      hintText: "Have something in mind?",
-                      border: OutlineInputBorder(borderSide: BorderSide.none)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black)),
+                      height: 35,
+                      width: MediaQuery.of(context).size.width / 1.7,
+                      child: TextField(
+                        controller: contentController,
+                        cursorColor: Colors.transparent,
+                        decoration: const InputDecoration(
+                            hintStyle: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 12),
+                            hintText: "Have something in mind?",
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none)),
+                      ),
+                    ),
+                    //SizedBox(width: 10,),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          userWrote = contentController.text;
+                          contentController.text = "";
+                        });
+                        if (userWrote == null || userWrote == "") return;
+                        mydbprovider.addRite(content: userWrote!);
+                      },
+                      child: const Text(
+                        "Add",
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              //SizedBox(width: 10,),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    userWrote = contentController.text;
-                    contentController.text = "";
-                  });
-                  if (userWrote == null || userWrote == "") return;
-                  mydbprovider.addRite(content: userWrote!);
+              const SizedBox(
+                height: 15,
+              ),
+              FutureBuilder(
+                future: mydbprovider.getAllWrites(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError || snapshot.data == null) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //therites
+                        ...snapshot.data!.map((aWrite) {
+                          final aWriteontent = aWrite.userContent;
+                          final aWriteStatus = aWrite.userIsDone;
+                          final aWriteId = aWrite.userWroteID;
+                          return aWriteTile(
+                              content: aWriteontent,
+                              isDone: aWriteStatus,
+                              id: aWriteId);
+                        })
+                      ],
+                    ),
+                  );
                 },
-                child: const Text(
-                  "Add",
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.purple,
-                      fontWeight: FontWeight.w600),
-                ),
-              )
+              ),
             ],
           ),
         ),
