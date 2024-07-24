@@ -31,16 +31,17 @@ class _AllritespageState extends State<Allritespage> {
   Widget aWriteTile(
       {required int id, required String content, required int isDone}) {
     return Container(
-      decoration: BoxDecoration(
-          border: const Border(bottom: BorderSide(color: Colors.black)),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5)),
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey)),
+        color: Colors.white,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
-            //contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            contentPadding: EdgeInsets.zero,
             leading: Text(content),
             trailing: isDone == 0
                 ? IconButton(
@@ -80,6 +81,7 @@ class _AllritespageState extends State<Allritespage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         toolbarHeight: 80,
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -154,22 +156,30 @@ class _AllritespageState extends State<Allritespage> {
                   if (snapshot.hasError || snapshot.data == null) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  return SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //therites
-                        ...snapshot.data!.map((aWrite) {
-                          final aWriteontent = aWrite.userContent;
-                          final aWriteStatus = aWrite.userIsDone;
-                          final aWriteId = aWrite.userWroteID;
-                          return aWriteTile(
-                              content: aWriteontent,
-                              isDone: aWriteStatus,
-                              id: aWriteId);
-                        })
-                      ],
+                  return Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.white)),
+                    height: MediaQuery.of(context).size.height / 1.7,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //therites
+                          ...snapshot.data!.map((aWrite) {
+                            final aWriteontent = aWrite.userContent;
+                            final aWriteStatus = aWrite.userIsDone;
+                            final aWriteId = aWrite.userWroteID;
+                            return aWriteTile(
+                                content: aWriteontent,
+                                isDone: aWriteStatus,
+                                id: aWriteId);
+                          })
+                        ],
+                      ),
                     ),
                   );
                 },
