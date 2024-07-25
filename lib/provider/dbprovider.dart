@@ -68,6 +68,12 @@ class Dbproviders {
         where: "id = ?", whereArgs: [id]);
   }
 
+  void editAWrite({required int id, required String newContent}) async {
+    final db = await openMyDatabase();
+    await db.update(tableName, {tableContent: newContent},
+        where: "id = ?", whereArgs: [id]);
+  }
+
   //DELETE
   void deleteAwrite({required int id}) async {
     final db = await openMyDatabase();

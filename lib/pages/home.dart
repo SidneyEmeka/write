@@ -30,59 +30,42 @@ class _AllritespageState extends State<Allritespage> {
   //LIST TILE
   Widget aWriteTile(
       {required int id, required String content, required int isDone}) {
-    return Dismissible(
-      key: ValueKey<int>(id),
-      onDismissed: (direction) {
-        mydbprovider.deleteAwrite(id: id);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: Colors.grey,
-          content: Align(
-              alignment: Alignment.center,
-              child: Text("Write Deleted",
-                  style: TextStyle(color: Colors.white, fontSize: 12))),
-          duration: Duration(seconds: 1),
-        ));
-      },
-      background: Container(
-        decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.white)),
-       // margin: const EdgeInsets.symmetric(horizontal: 5),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        alignment: Alignment.centerLeft,
-        child: const Text(
-          "Delete",
-          style: TextStyle(color: Colors.white, fontSize: 12),
-        ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: const Border(bottom: BorderSide(color: Colors.grey)),
+        color: Colors.purple.shade900,
       ),
-      secondaryBackground: Container(
-        decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.white)),
-       // margin: const EdgeInsets.symmetric(horizontal: 5),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        alignment: Alignment.centerRight,
-        child: const Text(
-          "Delete",
-          style: TextStyle(color: Colors.white, fontSize: 12),
-        ),
-      ),
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey)),
-          color: Colors.white,
-        ),
-        child: ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 5),
-          leading: Text(
-            content,
+      child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: IconButton(
+              onPressed: () {
+                mydbprovider.deleteAwrite(id: id);
+                setState(() {});
+              },
+              icon: const Icon(
+                FontAwesomeIcons.trash,
+                size: 15,
+                color: Colors.white,
+              )),
+          title: Text(
+            content.toUpperCase(),
             style: isDone == 1
                 ? const TextStyle(
-                    decoration: TextDecoration.lineThrough, color: Colors.grey)
-                : const TextStyle(decoration: TextDecoration.none),
+                    decoration: TextDecoration.lineThrough,
+                    decorationThickness: 3,
+                    decorationColor: Colors.green,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.white)
+                : const TextStyle(
+                    decoration: TextDecoration.none,
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
           ),
           trailing: isDone == 0
               ? IconButton(
@@ -94,7 +77,7 @@ class _AllritespageState extends State<Allritespage> {
                   },
                   icon: const Icon(
                     FontAwesomeIcons.circle,
-                    color: Colors.red,
+                    color: Colors.white,
                     size: 15,
                   ),
                 )
@@ -110,9 +93,7 @@ class _AllritespageState extends State<Allritespage> {
                     color: Colors.green,
                     size: 15,
                   ),
-                ),
-        ),
-      ),
+                )),
     );
   }
 
@@ -131,101 +112,89 @@ class _AllritespageState extends State<Allritespage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-          decoration: BoxDecoration(
-              color: Colors.grey, borderRadius: BorderRadius.circular(10)),
-          height: MediaQuery.of(context).size.height / 1.3,
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 15,
+            ),
+            FutureBuilder(
+              future: mydbprovider.getAllWrites(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError || snapshot.data == null) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.black)),
-                      height: 35,
-                      width: MediaQuery.of(context).size.width / 1.7,
-                      child: TextField(
-                        controller: contentController,
-                        cursorColor: Colors.transparent,
-                        decoration: const InputDecoration(
-                            hintStyle: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12),
-                            hintText: "Wanna 'rite' something?",
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none)),
-                      ),
-                    ),
-                    //SizedBox(width: 10,),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          userWrote = contentController.text;
-                          contentController.text = "";
-                        });
-                        if (userWrote == null || userWrote == "") return;
-                        mydbprovider.addRite(content: userWrote!);
-                      },
-                      child: const Text(
-                        "Add",
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    )
+                    //therites
+                    ...snapshot.data!.map((aWrite) {
+                      final aWriteontent = aWrite.userContent;
+                      final aWriteStatus = aWrite.userIsDone;
+                      final aWriteId = aWrite.userWroteID;
+                      return aWriteTile(
+                          content: aWriteontent,
+                          isDone: aWriteStatus,
+                          id: aWriteId);
+                    })
                   ],
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              FutureBuilder(
-                future: mydbprovider.getAllWrites(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError || snapshot.data == null) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  return Container(
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.brown.shade700,
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (_) {
+                return AlertDialog(
+                  title: const Text(
+                    "What's on your mind",
+                    textAlign: TextAlign.center,
+                  ),
+                  content: Container(
                     decoration: BoxDecoration(
-                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.white)),
-                     height: MediaQuery.of(context).size.height / 1.7,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //therites
-                          ...snapshot.data!.map((aWrite) {
-                            final aWriteontent = aWrite.userContent;
-                            final aWriteStatus = aWrite.userIsDone;
-                            final aWriteId = aWrite.userWroteID;
-                            return aWriteTile(
-                                content: aWriteontent,
-                                isDone: aWriteStatus,
-                                id: aWriteId);
-                          })
-                        ],
-                      ),
+                        border: Border.all(color: Colors.black)),
+                    height: 35,
+                    width: MediaQuery.of(context).size.width / 1.7,
+                    child: TextField(
+                      controller: contentController,
+                      cursorColor: Colors.transparent,
+                      decoration: const InputDecoration(
+                          hintStyle: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12),
+                          hintText: "Wanna 'rite' something?",
+                          border:
+                              OutlineInputBorder(borderSide: BorderSide.none)),
                     ),
-                  );
-                },
-              ),
-            ],
-          ),
+                  ),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            userWrote = contentController.text;
+                            contentController.text = "";
+                          });
+                          if (userWrote == null || userWrote == "") return;
+                          mydbprovider.addRite(content: userWrote!);
+                        },
+                        child: const Text("Save"))
+                  ],
+                );
+              });
+        },
+        child: const Icon(
+          FontAwesomeIcons.penNib,
+          size: 15,
+          color: Colors.white,
         ),
       ),
     );
