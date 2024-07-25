@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,10 +27,15 @@ class _AllritespageState extends State<Allritespage> {
   //USER INPUTS
   String? userWrote;
   final contentController = TextEditingController();
+  String? userDescribed;
+  final contentDeescController = TextEditingController();
 
   //LIST TILE
   Widget aWriteTile(
-      {required int id, required String content, required int isDone}) {
+      {required int id,
+      required String content,
+      required String description,
+      required int isDone}) {
     return Slidable(
       endActionPane: ActionPane(
         motion: const StretchMotion(),
@@ -43,6 +47,7 @@ class _AllritespageState extends State<Allritespage> {
                   builder: (context) => Edit(
                     theWriteId: id,
                     theWriteContent: content,
+                    theWriteContentDescription: description,
                   ),
                 ),
               );
@@ -102,12 +107,13 @@ class _AllritespageState extends State<Allritespage> {
                   decoration: const BoxDecoration(
                       //border: Border.all(color: Colors.white)
                       ),
-                  child: const Text(
-                      style: TextStyle(
-                          color: Colors.white,
-                          overflow: TextOverflow.fade,
-                          fontSize: 12),
-                      "String data key style structstyle etextalign locale overflow textscaler maxlines semeanitics label"),
+                  child: Text(
+                    description,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        overflow: TextOverflow.fade,
+                        fontSize: 12),
+                  ),
                 ),
                 const Text(
                   "...Tap to read more",
@@ -186,10 +192,12 @@ class _AllritespageState extends State<Allritespage> {
                       final aWriteontent = aWrite.userContent;
                       final aWriteStatus = aWrite.userIsDone;
                       final aWriteId = aWrite.userWroteID;
+                      final aWriteDescription = aWrite.userContentDescription;
                       return aWriteTile(
                           content: aWriteontent,
                           isDone: aWriteStatus,
-                          id: aWriteId);
+                          id: aWriteId,
+                          description: aWriteDescription);
                     })
                   ],
                 );
@@ -213,23 +221,56 @@ class _AllritespageState extends State<Allritespage> {
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
                   ),
-                  content: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.black)),
-                    height: 35,
-                    width: MediaQuery.of(context).size.width / 1.7,
-                    child: TextField(
-                      controller: contentController,
-                      cursorColor: Colors.transparent,
-                      decoration: const InputDecoration(
-                          hintStyle: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12),
-                          hintText: "Wanna 'rite' something?",
-                          border:
-                              OutlineInputBorder(borderSide: BorderSide.none)),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.black)),
+                          height: 50,
+                          width: MediaQuery.of(context).size.width / 1.7,
+                          child: TextField(
+                            //maxLines: 2,
+                            controller: contentController,
+                            cursorColor: Colors.transparent,
+                            decoration: const InputDecoration(
+                                hintStyle: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12),
+                                hintText: "Title",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide.none)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.black)),
+                          height: MediaQuery.of(context).size.height/ 1.7,
+                          width: MediaQuery.of(context).size.width / 1.7,
+                          child: TextField(
+                            maxLines: null,
+                            controller: contentDeescController,
+                            cursorColor: Colors.transparent,
+                            decoration: const InputDecoration(
+                    
+                                hintStyle: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12),
+                                hintText: "Description",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide.none)),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   actions: [
@@ -240,10 +281,13 @@ class _AllritespageState extends State<Allritespage> {
                         onPressed: () {
                           setState(() {
                             userWrote = contentController.text;
+                            userDescribed = contentDeescController.text;
+                            contentDeescController.text = "";
                             contentController.text = "";
                           });
                           if (userWrote == null || userWrote == "") return;
-                          mydbprovider.addRite(content: userWrote!);
+                          mydbprovider.addRite(
+                              content: userWrote!, description: userDescribed!);
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: Colors.brown.shade700,

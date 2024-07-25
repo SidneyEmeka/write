@@ -37,10 +37,11 @@ class Dbproviders {
   }
 
 //INSERT
-  void addRite({required String content}) async {
+  void addRite({required String content, required String description}) async {
     final db = await openMyDatabase();
     final received = await db.insert(tableName, {
       tableContent: content,
+      tableContentDesc: description,
       tableisDone: 0,
     });
     if (received != 0) {
@@ -55,6 +56,7 @@ class Dbproviders {
 //print(data);
     List<Writesmodel> theWrites = data.map((aRow) {
       return Writesmodel(
+          userContentDescription: aRow["description"] as String,
           userContent: aRow["content"] as String,
           userWroteID: aRow["id"] as int,
           userIsDone: aRow["isdone"] as int);
@@ -62,26 +64,37 @@ class Dbproviders {
     return theWrites;
   }
 
-  //UPDATE
+  //UPDATE STATUS
   void updateAWrite({required int id, required int isdone}) async {
     final db = await openMyDatabase();
     final updated = await db.update(tableName, {tableisDone: isdone},
         where: "id = ?", whereArgs: [id]);
-    if(updated != 0){print("STATUS UPDATED");}
+    if (updated != 0) {
+      print("STATUS UPDATED");
+    }
   }
 
-  void editAWrite({required int id, required String newContent}) async {
+//EDIT
+  void editAWrite(
+      {required int id,
+      required String newContent,
+      required String newDescription}) async {
     final db = await openMyDatabase();
-    final edited = await db.update(tableName, {tableContent: newContent},
+    final edited = await db.update(
+        tableName, {tableContent: newContent, tableContentDesc: newDescription},
         where: "id = ?", whereArgs: [id]);
-    if(edited != 0){print("EDITED SUCCESFULLY");}
+    if (edited != 0) {
+      print("EDITED SUCCESFULLY");
+    }
   }
 
   //DELETE
   void deleteAwrite({required int id}) async {
     final db = await openMyDatabase();
-   final deleted = await db.delete(tableName, where: "id =?", whereArgs: [id]);
-    if(deleted != 0){print("DELETED SUCCESFULLY");}
+    final deleted = await db.delete(tableName, where: "id =?", whereArgs: [id]);
+    if (deleted != 0) {
+      print("DELETED SUCCESFULLY");
+    }
   }
 //CLASS END
 }
