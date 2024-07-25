@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:write/pages/edit.dart';
 import 'package:write/provider/dbprovider.dart';
 
 import '../models/writesmodel.dart';
@@ -30,70 +32,120 @@ class _AllritespageState extends State<Allritespage> {
   //LIST TILE
   Widget aWriteTile(
       {required int id, required String content, required int isDone}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: const Border(bottom: BorderSide(color: Colors.grey)),
-        color: Colors.purple.shade900,
-      ),
-      child: ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: IconButton(
-              onPressed: () {
-                mydbprovider.deleteAwrite(id: id);
-                setState(() {});
-              },
-              icon: const Icon(
-                FontAwesomeIcons.trash,
-                size: 15,
-                color: Colors.white,
-              )),
-          title: Text(
-            content.toUpperCase(),
-            style: isDone == 1
-                ? const TextStyle(
-                    decoration: TextDecoration.lineThrough,
-                    decorationThickness: 3,
-                    decorationColor: Colors.green,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white)
-                : const TextStyle(
-                    decoration: TextDecoration.none,
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+    return Slidable(
+      endActionPane: ActionPane(
+        motion: const StretchMotion(),
+        children: [
+          SlidableAction(
+            onPressed: ((context) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => Edit(
+                    theWriteId: id,
+                    theWriteContent: content,
                   ),
+                ),
+              );
+            }),
+            icon: FontAwesomeIcons.penToSquare,
+            backgroundColor: Colors.brown.shade700,
+            borderRadius: BorderRadius.circular(10),
+            autoClose: true,
+            padding: EdgeInsets.zero,
           ),
-          trailing: isDone == 0
-              ? IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isDone = 1;
-                    });
-                    mydbprovider.updateAWrite(id: id, isdone: isDone);
-                  },
-                  icon: const Icon(
-                    FontAwesomeIcons.circle,
-                    color: Colors.white,
-                    size: 15,
-                  ),
-                )
-              : IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isDone = 0;
-                    });
-                    mydbprovider.updateAWrite(id: id, isdone: isDone);
-                  },
-                  icon: const Icon(
-                    FontAwesomeIcons.circleCheck,
-                    color: Colors.green,
-                    size: 15,
-                  ),
+        ],
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: const Border(bottom: BorderSide(color: Colors.grey)),
+          color: Colors.purple.shade900,
+        ),
+        child: ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: IconButton(
+                onPressed: () {
+                  mydbprovider.deleteAwrite(id: id);
+                  setState(() {});
+                },
+                icon: const Icon(
+                  FontAwesomeIcons.trash,
+                  size: 15,
+                  color: Colors.white,
                 )),
+            title: Text(
+              content.toUpperCase(),
+              style: isDone == 1
+                  ? const TextStyle(
+                      decoration: TextDecoration.lineThrough,
+                      decorationThickness: 3,
+                      decorationColor: Colors.green,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white)
+                  : const TextStyle(
+                      decoration: TextDecoration.none,
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+            ),
+            subtitle: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  //alignment: Alignment.center,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                      //border: Border.all(color: Colors.white)
+                      ),
+                  child: const Text(
+                      style: TextStyle(
+                          color: Colors.white,
+                          overflow: TextOverflow.fade,
+                          fontSize: 12),
+                      "String data key style structstyle etextalign locale overflow textscaler maxlines semeanitics label"),
+                ),
+                const Text(
+                  "...Tap to read more",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: 10,
+                      color: Colors.white),
+                )
+              ],
+            ),
+            trailing: isDone == 0
+                ? IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isDone = 1;
+                      });
+                      mydbprovider.updateAWrite(id: id, isdone: isDone);
+                    },
+                    icon: const Icon(
+                      FontAwesomeIcons.circle,
+                      color: Colors.white,
+                      size: 15,
+                    ),
+                  )
+                : IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isDone = 0;
+                      });
+                      mydbprovider.updateAWrite(id: id, isdone: isDone);
+                    },
+                    icon: const Icon(
+                      FontAwesomeIcons.circleCheck,
+                      color: Colors.green,
+                      size: 15,
+                    ),
+                  )),
+      ),
     );
   }
 
@@ -156,6 +208,10 @@ class _AllritespageState extends State<Allritespage> {
                   title: const Text(
                     "What's on your mind",
                     textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                   content: Container(
                     decoration: BoxDecoration(
@@ -178,6 +234,9 @@ class _AllritespageState extends State<Allritespage> {
                   ),
                   actions: [
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purple.shade900,
+                            foregroundColor: Colors.white),
                         onPressed: () {
                           setState(() {
                             userWrote = contentController.text;
@@ -185,6 +244,16 @@ class _AllritespageState extends State<Allritespage> {
                           });
                           if (userWrote == null || userWrote == "") return;
                           mydbprovider.addRite(content: userWrote!);
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.brown.shade700,
+                            content: const Align(
+                                alignment: Alignment.center,
+                                child: Text("Rite Added Successfully",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12))),
+                            duration: const Duration(seconds: 1),
+                          ));
                         },
                         child: const Text("Save"))
                   ],

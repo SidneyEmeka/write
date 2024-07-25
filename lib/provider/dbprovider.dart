@@ -14,6 +14,7 @@ class Dbproviders {
   final String tableName = "myrites";
   final String tableID = "id";
   final String tableContent = "content";
+  final String tableContentDesc = "description";
   final String tableisDone = "isdone";
 
   // Future<Database> get database async {
@@ -30,7 +31,7 @@ class Dbproviders {
     final mydb =
         await openDatabase(dbPath, version: 1, onCreate: (db, version) {
       db.execute(
-          'CREATE TABLE $tableName ($tableID INTEGER PRIMARY KEY AUTOINCREMENT,$tableContent TEXT NOT NULL, $tableisDone INTEGER NOT NULL)');
+          'CREATE TABLE $tableName ($tableID INTEGER PRIMARY KEY AUTOINCREMENT,$tableContent TEXT NOT NULL,$tableContentDesc TEXT NOT NULL,$tableisDone INTEGER NOT NULL)');
     });
     return mydb;
   }
@@ -43,7 +44,7 @@ class Dbproviders {
       tableisDone: 0,
     });
     if (received != 0) {
-      print("Succesful");
+      print("RECEIVED SUCCESSFULLY");
     }
   }
 
@@ -64,20 +65,23 @@ class Dbproviders {
   //UPDATE
   void updateAWrite({required int id, required int isdone}) async {
     final db = await openMyDatabase();
-    await db.update(tableName, {tableisDone: isdone},
+    final updated = await db.update(tableName, {tableisDone: isdone},
         where: "id = ?", whereArgs: [id]);
+    if(updated != 0){print("STATUS UPDATED");}
   }
 
   void editAWrite({required int id, required String newContent}) async {
     final db = await openMyDatabase();
-    await db.update(tableName, {tableContent: newContent},
+    final edited = await db.update(tableName, {tableContent: newContent},
         where: "id = ?", whereArgs: [id]);
+    if(edited != 0){print("EDITED SUCCESFULLY");}
   }
 
   //DELETE
   void deleteAwrite({required int id}) async {
     final db = await openMyDatabase();
-    await db.delete(tableName, where: "id =?", whereArgs: [id]);
+   final deleted = await db.delete(tableName, where: "id =?", whereArgs: [id]);
+    if(deleted != 0){print("DELETED SUCCESFULLY");}
   }
 //CLASS END
 }
