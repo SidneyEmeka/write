@@ -164,10 +164,12 @@ class _AllritespageState extends State<Allritespage> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         toolbarHeight: 40,
-        backgroundColor: Colors.white,
         centerTitle: true,
+        leading: const Text(""),
+        backgroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               "RITE",
@@ -292,6 +294,7 @@ class _AllritespageState extends State<Allritespage> {
                             backgroundColor: Colors.purple.shade900,
                             foregroundColor: Colors.white),
                         onPressed: () {
+
                           setState(() {
                             userWrote = contentController.text;
                             userDescribed = contentDeescController.text;
@@ -302,6 +305,8 @@ class _AllritespageState extends State<Allritespage> {
                           mydbprovider.addRite(
                               content: userWrote!, description: userDescribed!);
                           Navigator.pop(context);
+
+
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: Colors.brown.shade700,
                             content: const Align(

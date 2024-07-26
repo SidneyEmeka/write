@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:write/pages/home.dart';
@@ -71,25 +72,29 @@ class _EditState extends State<Edit> {
                 cursorHeight: 20,
                 maxLines: null,
                 key: Key(widget.theWriteContent),
-                initialValue: widget.theWriteContent,
+                initialValue: widget.theWriteContent.toUpperCase(),
                 onChanged: (value) {
                   setState(() {
                     userEditContent = value;
                   });
                 },
-                decoration: const InputDecoration(
-                    hintStyle: TextStyle(
+                decoration: InputDecoration(
+                    helperText: "TITLE",
+                    helperStyle: const TextStyle(
+                        fontSize: 5, fontWeight: FontWeight.bold),
+                    hintStyle: const TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w400,
                         fontSize: 12),
                     hintText: "Wanna 'rite' something new?",
-                    border: OutlineInputBorder()),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
               ),
               const SizedBox(
                 height: 10,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height/1.4,
+                height: MediaQuery.of(context).size.height / 1.4,
                 child: SingleChildScrollView(
                   child: TextFormField(
                     cursorColor: Colors.purple.shade900,
@@ -102,13 +107,17 @@ class _EditState extends State<Edit> {
                         userEditContentDescription = value;
                       });
                     },
-                    decoration: const InputDecoration(
-                        hintStyle: TextStyle(
+                    decoration: InputDecoration(
+                        helperText: "DESCRIPTION",
+                        helperStyle: const TextStyle(
+                            fontSize: 5, fontWeight: FontWeight.bold),
+                        hintStyle: const TextStyle(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w400,
                             fontSize: 12),
                         hintText: "Wanna 'rite' something new?",
-                        border: OutlineInputBorder()),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10))),
                   ),
                 ),
               ),
@@ -120,13 +129,16 @@ class _EditState extends State<Edit> {
         backgroundColor: Colors.brown.shade700,
         onPressed: () {
           if (userEditContent == null || userEditContent == "") {
-            return;
+            userEditContent = widget.theWriteContent;
+          }
+          if (userEditContentDescription == null ||
+              userEditContentDescription == "") {
+            userEditContentDescription = widget.theWriteContentDescription;
           }
           mydbprovider.editAWrite(
               id: widget.theWriteId,
               newContent: userEditContent!,
               newDescription: userEditContentDescription!);
-          // Navigator.pop(context);
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const Allritespage()),
           );
