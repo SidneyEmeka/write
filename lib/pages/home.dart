@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,6 +20,7 @@ class _AllritespageState extends State<Allritespage> {
   void initState() {
     super.initState();
     mydbprovider.getAllWrites();
+    print("HOME INI");
   }
 
   //initializing a database instance
@@ -161,12 +163,25 @@ class _AllritespageState extends State<Allritespage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        toolbarHeight: 80,
+        toolbarHeight: 40,
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text("RITE"), Icon(FontAwesomeIcons.pagelines)],
+          children: [
+            Text(
+              "RITE",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Colors.brown.shade900,
+              ),
+            ),
+            Icon(
+              FontAwesomeIcons.pagelines,
+              color: Colors.brown.shade900,
+            )
+          ],
         ),
       ),
       body: SingleChildScrollView(
@@ -182,6 +197,17 @@ class _AllritespageState extends State<Allritespage> {
               builder: (context, snapshot) {
                 if (snapshot.hasError || snapshot.data == null) {
                   return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.data!.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "You Don't Have Any Rite",
+                      style: TextStyle(
+                          color: Colors.brown,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  );
                 }
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -226,49 +252,36 @@ class _AllritespageState extends State<Allritespage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.black)),
-                          height: 50,
-                          width: MediaQuery.of(context).size.width / 1.7,
-                          child: TextField(
-                            //maxLines: 2,
-                            controller: contentController,
-                            cursorColor: Colors.transparent,
-                            decoration: const InputDecoration(
-                                hintStyle: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                                hintText: "Title",
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide.none)),
-                          ),
+                        TextField(
+                          maxLines: null,
+                          controller: contentController,
+                          cursorColor: Colors.purple.shade900,
+                          cursorHeight: 20,
+                          decoration: InputDecoration(
+                              hintStyle: const TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                              hintText: "Title",
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.black)),
-                          height: MediaQuery.of(context).size.height/ 1.7,
-                          width: MediaQuery.of(context).size.width / 1.7,
-                          child: TextField(
-                            maxLines: null,
-                            controller: contentDeescController,
-                            cursorColor: Colors.transparent,
-                            decoration: const InputDecoration(
-                    
-                                hintStyle: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                                hintText: "Description",
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide.none)),
-                          ),
+                        TextField(
+                          maxLines: null,
+                          controller: contentDeescController,
+                          cursorColor: Colors.purple.shade900,
+                          cursorHeight: 20,
+                          decoration: const InputDecoration(
+                              hintStyle: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12),
+                              hintText: "Description",
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide.none)),
                         ),
                       ],
                     ),
