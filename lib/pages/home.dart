@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:write/pages/edit.dart';
+import 'package:write/pages/read.dart';
 import 'package:write/provider/dbprovider.dart';
 
 import '../models/writesmodel.dart';
@@ -68,7 +69,7 @@ class _AllritespageState extends State<Allritespage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: const Border(bottom: BorderSide(color: Colors.grey)),
-          color: Colors.purple.shade900,
+          color: isDone == 0 ? Colors.purple.shade900 : Colors.grey,
         ),
         child: ListTile(
             contentPadding: EdgeInsets.zero,
@@ -87,8 +88,8 @@ class _AllritespageState extends State<Allritespage> {
               style: isDone == 1
                   ? const TextStyle(
                       decoration: TextDecoration.lineThrough,
-                      decorationThickness: 3,
-                      decorationColor: Colors.green,
+                      decorationThickness: 1,
+                      decorationColor: Colors.white,
                       fontSize: 12,
                       fontWeight: FontWeight.w300,
                       color: Colors.white)
@@ -104,26 +105,37 @@ class _AllritespageState extends State<Allritespage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  //alignment: Alignment.center,
                   height: 50,
-                  decoration: const BoxDecoration(
-                      //border: Border.all(color: Colors.white)
-                      ),
+                  decoration: const BoxDecoration(),
                   child: Text(
                     description,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        overflow: TextOverflow.fade,
-                        fontSize: 12),
+                    style: isDone == 1
+                        ? const TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            decorationThickness: 1,
+                            decorationColor: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w200,
+                            color: Colors.white,
+                            overflow: TextOverflow.fade,
+                          )
+                        : const TextStyle(
+                            decorationColor: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white,
+                            overflow: TextOverflow.fade,
+                          ),
                   ),
                 ),
-                const Text(
-                  "...Tap to read more",
-                  style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontSize: 10,
-                      color: Colors.white),
-                )
+                if (!description.isEmpty)
+                  const Text(
+                    "...Tap to read more",
+                    style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontSize: 10,
+                        color: Colors.white),
+                  )
               ],
             ),
             trailing: isDone == 0
@@ -149,7 +161,7 @@ class _AllritespageState extends State<Allritespage> {
                     },
                     icon: const Icon(
                       FontAwesomeIcons.circleCheck,
-                      color: Colors.green,
+                      color: Colors.white,
                       size: 15,
                     ),
                   )),
@@ -201,13 +213,13 @@ class _AllritespageState extends State<Allritespage> {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.data!.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Text(
                       "You Don't Have Any Rite",
                       style: TextStyle(
-                          color: Colors.brown,
+                          color: Colors.brown.shade900,
                           fontSize: 12,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.w500),
                     ),
                   );
                 }
@@ -221,11 +233,21 @@ class _AllritespageState extends State<Allritespage> {
                       final aWriteStatus = aWrite.userIsDone;
                       final aWriteId = aWrite.userWroteID;
                       final aWriteDescription = aWrite.userContentDescription;
-                      return aWriteTile(
-                          content: aWriteontent,
-                          isDone: aWriteStatus,
-                          id: aWriteId,
-                          description: aWriteDescription);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => Read(
+                                    title: aWriteontent,
+                                    description: aWriteDescription)),
+                          );
+                        },
+                        child: aWriteTile(
+                            content: aWriteontent,
+                            isDone: aWriteStatus,
+                            id: aWriteId,
+                            description: aWriteDescription),
+                      );
                     })
                   ],
                 );
@@ -294,19 +316,20 @@ class _AllritespageState extends State<Allritespage> {
                             backgroundColor: Colors.purple.shade900,
                             foregroundColor: Colors.white),
                         onPressed: () {
-
                           setState(() {
                             userWrote = contentController.text;
                             userDescribed = contentDeescController.text;
-                            contentDeescController.text = "";
-                            contentController.text = "";
                           });
-                          if (userWrote == null || userWrote == "") return;
+                          if (userWrote == null || userWrote == "") {
+                            userWrote = "";
+                          }
+                          if (userDescribed == null || userDescribed == "") {
+                            userDescribed = "";
+                          }
+                          if (userDescribed == "" && userWrote == "") return;
                           mydbprovider.addRite(
                               content: userWrote!, description: userDescribed!);
                           Navigator.pop(context);
-
-
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: Colors.brown.shade700,
                             content: const Align(
@@ -316,6 +339,8 @@ class _AllritespageState extends State<Allritespage> {
                                         color: Colors.white, fontSize: 12))),
                             duration: const Duration(seconds: 1),
                           ));
+                          contentDeescController.text = "";
+                          contentController.text = "";
                         },
                         child: const Text("Save"))
                   ],
