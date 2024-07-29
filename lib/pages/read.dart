@@ -52,6 +52,7 @@ class _ReadState extends State<Read> {
               Text(
                 widget.description,
                 style: TextStyle(
+                  height: 1.8,
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
                   color: Colors.brown.shade900,
