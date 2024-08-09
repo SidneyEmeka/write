@@ -30,7 +30,7 @@ frame for a task is expired
 		</tr>
 		<tr>
 			<td>
-			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/allrite.jpg" alt="Home"></img>
+			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/allrites.jpg" alt="Home"></img>
 			</td>
 			<td>
 			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/addrite.jpg" alt="5-days"></img>
@@ -52,6 +52,7 @@ frame for a task is expired
 	<tr>
 		<th>Slide to Edit</th>
 		<th>Edit Existing Note</th>
+		<th>Complete a Task</th>
 		</tr>
 		<tr>
 	<td>
@@ -60,8 +61,14 @@ frame for a task is expired
 	<td>
 			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/editrite.jpg" alt="Search"></img>
 			</td>
+	<td>
+			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/onread.jpg" alt="Search"></img>
+			</td>
 		</tr>
 		<tr>
+			<td>
+				🔗 <a href="https://x.com/sidswipe/status/1809690837770551528?s=46">Tweet</a>
+			</td>
 			<td>
 				🔗 <a href="https://x.com/sidswipe/status/1809690837770551528?s=46">Tweet</a>
 			</td>
