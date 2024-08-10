@@ -61,7 +61,7 @@ Write uses SQFLite to persist data in user device
 			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/editrite.jpg" alt="Search"></img>
 			</td>
 	<td>
-			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/onread.jpg" alt="Search"></img>
+			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/readstatus.jpg" alt="Search"></img>
 			</td>
 		</tr>
 		<tr>
