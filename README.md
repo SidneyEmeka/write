@@ -1,9 +1,8 @@
 # write
-An app where a user can set a task and also assign time to it<br>
-Write sends push notifications to users when the appointed time
-frame for a task is expired.
+An app where a user can write down their thoughts<br>
+Write uses SQFLite to persist data in user device
 
-## Mobile App
+## CRUD ops
 <table align="center">
 	<tbody width="100%">
 	<tr>
