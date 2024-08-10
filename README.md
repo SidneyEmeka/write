@@ -51,14 +51,14 @@ Write uses SQFLite to persist data in user device
 	<tr>
 		<th>Slide to Edit</th>
 		<th>Edit Existing Note</th>
-		<th>Complete a Task</th>
+		<th>Read Status</th>
 		</tr>
 		<tr>
 	<td>
 			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/sliderite.jpg" alt="Error"></img>
 			</td>
 	<td>
-			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/editrite.jpg" alt="Search"></img>
+			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/editarite.jpg" alt="Search"></img>
 			</td>
 	<td>
 			<img src="https://github.com/SidneyEmeka/myfiles/blob/master/write/readstatus.jpg" alt="Search"></img>
